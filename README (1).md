@@ -1,7 +1,4 @@
 
-#trend 1: Male customers generate three times as much revenue ($1867.68) as female customers ($382.91) with a similar average price around $2.90. 
-#trend 2: Customers in thier early-mid twenties generate the most revenue.
-#trend 3: Both in top spenders and top units sold are items pertaining to revenge: Betrayal, Whisper of Grieving Widows and Retribution Axe. 
 
 import pandas as pd
 import numpy as np
@@ -409,3 +406,7 @@ purchase_analysis
 </table> 
 
 
+
+#trend 1: Male customers generate three times as much revenue ($1867.68) as female customers ($382.91) with a similar average price around $2.90. 
+#trend 2: Customers in thier early-mid twenties generate the most revenue.
+#trend 3: Both in top spenders and top units sold are items pertaining to revenge: Betrayal, Whisper of Grieving Widows and Retribution Axe. 
