@@ -1,4 +1,4 @@
-
+Analyzing the data for their most recent fantasy game Heroes of Pymoli + generating a report that breaks down the game's purchasing data into meaningful insights. Python, Pandas, Numpy + Matplotlib.
 
 import pandas as pd
 import numpy as np
