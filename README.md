@@ -6,6 +6,7 @@ import numpy as np
 
 ```python
 #reading and printing the dataset
+
 heroes_data=pd.read_json('/Users/carolineteti/Desktop/pymoli-challenge/purchase_data.json')
 heroes_data.head()
 
@@ -118,6 +119,7 @@ purchase_analysis
 
 # GENDER DEMOGRAPHICS
 #computing and printing PERCENTAGE and COUNT by a GroupBy
+
 count      = heroes_data.groupby('Gender').count()
 total      = heroes_data['Gender'].count()
 percentage = count / total
@@ -132,6 +134,7 @@ purchase_analysis
 ```python
 #GENDER DEMOGRAPHICS 2
 #PURCHASING ANALYSIS using count, mean, sum 
+
 count   = heroes_data.groupby('Gender').count()
 average = heroes_data.groupby('Gender').mean()
 total   = heroes_data.groupby('Gender').sum()
