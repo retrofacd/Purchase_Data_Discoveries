@@ -1,415 +1,188 @@
-Analyzing the data for their most recent fantasy game Heroes of Pymoli + generating a report that breaks down the game's purchasing data into meaningful insights. Python, Pandas, Numpy + Matplotlib.
-
-import pandas as pd
-import numpy as np
-
-
-```python
-#reading and printing the dataset
-
-heroes_data=pd.read_json('/Users/carolineteti/Desktop/pymoli-challenge/purchase_data.json')
-heroes_data.head()
-
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Age</th>
-      <th>Gender</th>
-      <th>Item ID</th>
-      <th>Item Name</th>
-      <th>Price</th>
-      <th>SN</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>38</td>
-      <td>Male</td>
-      <td>165</td>
-      <td>Bone Crushing Silver Skewer</td>
-      <td>3.37</td>
-      <td>Aelalis34</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>21</td>
-      <td>Male</td>
-      <td>119</td>
-      <td>Stormbringer, Dark Blade of Ending Misery</td>
-      <td>2.32</td>
-      <td>Eolo46</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>34</td>
-      <td>Male</td>
-      <td>174</td>
-      <td>Primitive Blade</td>
-      <td>2.46</td>
-      <td>Assastnya25</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>21</td>
-      <td>Male</td>
-      <td>92</td>
-      <td>Final Critic</td>
-      <td>1.36</td>
-      <td>Pheusrical25</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>23</td>
-      <td>Male</td>
-      <td>63</td>
-      <td>Stormfury Mace</td>
-      <td>1.27</td>
-      <td>Aela59</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-# PLAYER COUNT
-#computing and printing TOTAL PLAYER COUNT
-total_player_count = heroes_data['SN'].value_counts().count()
-total_player_count = pd.DataFrame(data=[{'Total Players': total_player_count}]).style.format({'Total Players': '{:}'})
-total_player_count
-
+## Unit 4 | Assignment - Pandas, Pandas, Pandas
 
-# PURCHASING ANALYSIS
-#computing and printing NUMBER OF UNIQUE ITEMS, AVERAGE PURCHASE PRICE, TOTAL NUMBER OF PURCHASES, TOTAL REVENUE
-#def variables, getting a count and calculate, avg. and sum
-currency = '${0:.2f}'
-unique  = len(set(heroes_data['Item Name']))
-count   = heroes_data['Price'].count()
-average = heroes_data['Price'].mean()
-total   = heroes_data['Price'].sum()
-
-player_data = [{'Number of Unique Items': unique,
-                'Average Purchase Price': average,
-                'Total Number of Purchases':    count,
-                'Total Revenue':          total}]
-
-purchase_analysis = pd.DataFrame(player_data).style.format({'Average Purchase Price': currency, 'Total Revenue': currency})
-purchase_analysis
-
-# GENDER DEMOGRAPHICS
-#computing and printing PERCENTAGE and COUNT by a GroupBy
-
-count      = heroes_data.groupby('Gender').count()
-total      = heroes_data['Gender'].count()
-percentage = count / total
-
-gender_data = {'Percentage':    percentage['SN'],
-          'Total Players': count['SN']}
-
-purchase_analysis = pd.DataFrame(gender_data).style.format({'Percentage': '{:.2%}'})
-purchase_analysis
-
-
-```python
-#GENDER DEMOGRAPHICS 2
-#PURCHASING ANALYSIS using count, mean, sum 
-
-count   = heroes_data.groupby('Gender').count()
-average = heroes_data.groupby('Gender').mean()
-total   = heroes_data.groupby('Gender').sum()
-max = heroes_data.groupby('Gender').max()
-min = heroes_data.groupby('Gender').min()
-
-
-gender_data = {'Purchase Count':         count['Price'],
-           'Average Purchase Price': average['Price'],
-           'Total Purchase Value':   total['Price'], 
-           'Max Purchase Price':   max['Price'],
-           'Min Purchase Price':   min['Price']} 
-
-purchase_analysis = pd.DataFrame(gender_data).style.format({'Average Purchase Price': currency, 'Total Purchase Value': currency})
-purchase_analysis
-```
-
-
-
-
-<style  type="text/css" >
-</style>  
-<table id="T_4ee31376_6dce_11e8_84ab_3200e8828b01" > 
-<thead>    <tr> 
-        <th class="blank level0" ></th> 
-        <th class="col_heading level0 col0" >Average Purchase Price</th> 
-        <th class="col_heading level0 col1" >Max Purchase Price</th> 
-        <th class="col_heading level0 col2" >Min Purchase Price</th> 
-        <th class="col_heading level0 col3" >Purchase Count</th> 
-        <th class="col_heading level0 col4" >Total Purchase Value</th> 
-    </tr>    <tr> 
-        <th class="index_name level0" >Gender</th> 
-        <th class="blank" ></th> 
-        <th class="blank" ></th> 
-        <th class="blank" ></th> 
-        <th class="blank" ></th> 
-        <th class="blank" ></th> 
-    </tr></thead> 
-<tbody>    <tr> 
-        <th id="T_4ee31376_6dce_11e8_84ab_3200e8828b01level0_row0" class="row_heading level0 row0" >Female</th> 
-        <td id="T_4ee31376_6dce_11e8_84ab_3200e8828b01row0_col0" class="data row0 col0" >$2.82</td> 
-        <td id="T_4ee31376_6dce_11e8_84ab_3200e8828b01row0_col1" class="data row0 col1" >4.95</td> 
-        <td id="T_4ee31376_6dce_11e8_84ab_3200e8828b01row0_col2" class="data row0 col2" >1.03</td> 
-        <td id="T_4ee31376_6dce_11e8_84ab_3200e8828b01row0_col3" class="data row0 col3" >136</td> 
-        <td id="T_4ee31376_6dce_11e8_84ab_3200e8828b01row0_col4" class="data row0 col4" >$382.91</td> 
-    </tr>    <tr> 
-        <th id="T_4ee31376_6dce_11e8_84ab_3200e8828b01level0_row1" class="row_heading level0 row1" >Male</th> 
-        <td id="T_4ee31376_6dce_11e8_84ab_3200e8828b01row1_col0" class="data row1 col0" >$2.95</td> 
-        <td id="T_4ee31376_6dce_11e8_84ab_3200e8828b01row1_col1" class="data row1 col1" >4.95</td> 
-        <td id="T_4ee31376_6dce_11e8_84ab_3200e8828b01row1_col2" class="data row1 col2" >1.03</td> 
-        <td id="T_4ee31376_6dce_11e8_84ab_3200e8828b01row1_col3" class="data row1 col3" >633</td> 
-        <td id="T_4ee31376_6dce_11e8_84ab_3200e8828b01row1_col4" class="data row1 col4" >$1867.68</td> 
-    </tr>    <tr> 
-        <th id="T_4ee31376_6dce_11e8_84ab_3200e8828b01level0_row2" class="row_heading level0 row2" >Other / Non-Disclosed</th> 
-        <td id="T_4ee31376_6dce_11e8_84ab_3200e8828b01row2_col0" class="data row2 col0" >$3.25</td> 
-        <td id="T_4ee31376_6dce_11e8_84ab_3200e8828b01row2_col1" class="data row2 col1" >4.32</td> 
-        <td id="T_4ee31376_6dce_11e8_84ab_3200e8828b01row2_col2" class="data row2 col2" >1.88</td> 
-        <td id="T_4ee31376_6dce_11e8_84ab_3200e8828b01row2_col3" class="data row2 col3" >11</td> 
-        <td id="T_4ee31376_6dce_11e8_84ab_3200e8828b01row2_col4" class="data row2 col4" >$35.74</td> 
-    </tr></tbody> 
-</table> 
-
-
-
-
-```python
-#AGE DEMOGRAPHICS
-#broken into bins of 4 years <10, 10-14, 15-19, etc.
-labels  = [f"{count}-{count + 4}" for count in np.arange(5, 45, 5)]
-count   = heroes_data.groupby(pd.cut(heroes_data['Age'], np.arange(5, 50, 5), labels=labels)).count()
-average = heroes_data.groupby(pd.cut(heroes_data['Age'], np.arange(5, 50, 5), labels=labels)).mean()
-total   = heroes_data.groupby(pd.cut(heroes_data['Age'], np.arange(5, 50, 5), labels=labels)).sum()
-
-age_data = {'Purchase Count':         count['Price'],
-            'Average Purchase Price': average['Price'],
-            'Total Purchase Value':   total['Price']} 
-
-purchase_analysis = pd.DataFrame(age_data).rename(index={'5-9': '<10', '40-44': '40+'}).style.format({'Average Purchase Price': currency, 'Total Purchase Value': currency})
-purchase_analysis
-```
-
-
-
-
-<style  type="text/css" >
-</style>  
-<table id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01" > 
-<thead>    <tr> 
-        <th class="blank level0" ></th> 
-        <th class="col_heading level0 col0" >Average Purchase Price</th> 
-        <th class="col_heading level0 col1" >Purchase Count</th> 
-        <th class="col_heading level0 col2" >Total Purchase Value</th> 
-    </tr>    <tr> 
-        <th class="index_name level0" >Age</th> 
-        <th class="blank" ></th> 
-        <th class="blank" ></th> 
-        <th class="blank" ></th> 
-    </tr></thead> 
-<tbody>    <tr> 
-        <th id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01level0_row0" class="row_heading level0 row0" ><10</th> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row0_col0" class="data row0 col0" >$3.02</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row0_col1" class="data row0 col1" >32</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row0_col2" class="data row0 col2" >$96.62</td> 
-    </tr>    <tr> 
-        <th id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01level0_row1" class="row_heading level0 row1" >10-14</th> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row1_col0" class="data row1 col0" >$2.87</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row1_col1" class="data row1 col1" >78</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row1_col2" class="data row1 col2" >$224.15</td> 
-    </tr>    <tr> 
-        <th id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01level0_row2" class="row_heading level0 row2" >15-19</th> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row2_col0" class="data row2 col0" >$2.87</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row2_col1" class="data row2 col1" >184</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row2_col2" class="data row2 col2" >$528.74</td> 
-    </tr>    <tr> 
-        <th id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01level0_row3" class="row_heading level0 row3" >20-24</th> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row3_col0" class="data row3 col0" >$2.96</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row3_col1" class="data row3 col1" >305</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row3_col2" class="data row3 col2" >$902.61</td> 
-    </tr>    <tr> 
-        <th id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01level0_row4" class="row_heading level0 row4" >25-29</th> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row4_col0" class="data row4 col0" >$2.89</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row4_col1" class="data row4 col1" >76</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row4_col2" class="data row4 col2" >$219.82</td> 
-    </tr>    <tr> 
-        <th id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01level0_row5" class="row_heading level0 row5" >30-34</th> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row5_col0" class="data row5 col0" >$3.07</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row5_col1" class="data row5 col1" >58</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row5_col2" class="data row5 col2" >$178.26</td> 
-    </tr>    <tr> 
-        <th id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01level0_row6" class="row_heading level0 row6" >35-39</th> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row6_col0" class="data row6 col0" >$2.90</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row6_col1" class="data row6 col1" >44</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row6_col2" class="data row6 col2" >$127.49</td> 
-    </tr>    <tr> 
-        <th id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01level0_row7" class="row_heading level0 row7" >40+</th> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row7_col0" class="data row7 col0" >$2.88</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row7_col1" class="data row7 col1" >3</td> 
-        <td id="T_4f655aa2_6dce_11e8_a1b5_3200e8828b01row7_col2" class="data row7 col2" >$8.64</td> 
-    </tr></tbody> 
-</table> 
-
-
-
-
-```python
-#TOP SPENDERS, ID top 5 SPENDERS, sorting by PURCHASE COUNT
-count = heroes_data.groupby(['Item ID', 'Item Name']).count()
-average = heroes_data.groupby(['Item ID', 'Item Name']).mean()
-total = heroes_data.groupby(['Item ID', 'Item Name']).sum()
-
-
-
-item_data = {'Purchase Count':         count['Price'],
-             'Average of Item Price': average['Price'],
-             'Total Purchase Value':   total['Price']} # format into currency
-
-purchase_analysis = pd.DataFrame(item_data).sort_values('Purchase Count', ascending=False).head(5).style.format({'Average Purchase Price': currency, 'Total Purchase Value': currency})
-purchase_analysis
-```
-
-
-
-
-<style  type="text/css" >
-</style>  
-<table id="T_50130618_6dce_11e8_a5d4_3200e8828b01" > 
-<thead>    <tr> 
-        <th class="blank" ></th> 
-        <th class="blank level0" ></th> 
-        <th class="col_heading level0 col0" >Average of Item Price</th> 
-        <th class="col_heading level0 col1" >Purchase Count</th> 
-        <th class="col_heading level0 col2" >Total Purchase Value</th> 
-    </tr>    <tr> 
-        <th class="index_name level0" >Item ID</th> 
-        <th class="index_name level1" >Item Name</th> 
-        <th class="blank" ></th> 
-        <th class="blank" ></th> 
-        <th class="blank" ></th> 
-    </tr></thead> 
-<tbody>    <tr> 
-        <th id="T_50130618_6dce_11e8_a5d4_3200e8828b01level0_row0" class="row_heading level0 row0" >39</th> 
-        <th id="T_50130618_6dce_11e8_a5d4_3200e8828b01level1_row0" class="row_heading level1 row0" >Betrayal, Whisper of Grieving Widows</th> 
-        <td id="T_50130618_6dce_11e8_a5d4_3200e8828b01row0_col0" class="data row0 col0" >2.35</td> 
-        <td id="T_50130618_6dce_11e8_a5d4_3200e8828b01row0_col1" class="data row0 col1" >11</td> 
-        <td id="T_50130618_6dce_11e8_a5d4_3200e8828b01row0_col2" class="data row0 col2" >$25.85</td> 
-    </tr>    <tr> 
-        <th id="T_50130618_6dce_11e8_a5d4_3200e8828b01level0_row1" class="row_heading level0 row1" >84</th> 
-        <th id="T_50130618_6dce_11e8_a5d4_3200e8828b01level1_row1" class="row_heading level1 row1" >Arcane Gem</th> 
-        <td id="T_50130618_6dce_11e8_a5d4_3200e8828b01row1_col0" class="data row1 col0" >2.23</td> 
-        <td id="T_50130618_6dce_11e8_a5d4_3200e8828b01row1_col1" class="data row1 col1" >11</td> 
-        <td id="T_50130618_6dce_11e8_a5d4_3200e8828b01row1_col2" class="data row1 col2" >$24.53</td> 
-    </tr>    <tr> 
-        <th id="T_50130618_6dce_11e8_a5d4_3200e8828b01level0_row2" class="row_heading level0 row2" >31</th> 
-        <th id="T_50130618_6dce_11e8_a5d4_3200e8828b01level1_row2" class="row_heading level1 row2" >Trickster</th> 
-        <td id="T_50130618_6dce_11e8_a5d4_3200e8828b01row2_col0" class="data row2 col0" >2.07</td> 
-        <td id="T_50130618_6dce_11e8_a5d4_3200e8828b01row2_col1" class="data row2 col1" >9</td> 
-        <td id="T_50130618_6dce_11e8_a5d4_3200e8828b01row2_col2" class="data row2 col2" >$18.63</td> 
-    </tr>    <tr> 
-        <th id="T_50130618_6dce_11e8_a5d4_3200e8828b01level0_row3" class="row_heading level0 row3" >175</th> 
-        <th id="T_50130618_6dce_11e8_a5d4_3200e8828b01level1_row3" class="row_heading level1 row3" >Woeful Adamantite Claymore</th> 
-        <td id="T_50130618_6dce_11e8_a5d4_3200e8828b01row3_col0" class="data row3 col0" >1.24</td> 
-        <td id="T_50130618_6dce_11e8_a5d4_3200e8828b01row3_col1" class="data row3 col1" >9</td> 
-        <td id="T_50130618_6dce_11e8_a5d4_3200e8828b01row3_col2" class="data row3 col2" >$11.16</td> 
-    </tr>    <tr> 
-        <th id="T_50130618_6dce_11e8_a5d4_3200e8828b01level0_row4" class="row_heading level0 row4" >13</th> 
-        <th id="T_50130618_6dce_11e8_a5d4_3200e8828b01level1_row4" class="row_heading level1 row4" >Serenity</th> 
-        <td id="T_50130618_6dce_11e8_a5d4_3200e8828b01row4_col0" class="data row4 col0" >1.49</td> 
-        <td id="T_50130618_6dce_11e8_a5d4_3200e8828b01row4_col1" class="data row4 col1" >9</td> 
-        <td id="T_50130618_6dce_11e8_a5d4_3200e8828b01row4_col2" class="data row4 col2" >$13.41</td> 
-    </tr></tbody> 
-</table> 
-
-
-
-
-```python
-#MOST POPULAR ITEMS, sorting value by TOTAL PURCHASE VALUE
-purchase_analysis = pd.DataFrame(item_data).sort_values('Total Purchase Value', ascending=False).head(5).style.format({'Average Purchase Price': currency, 'Total Purchase Value': currency})
-purchase_analysis
-```
-
-
-
-
-<style  type="text/css" >
-</style>  
-<table id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01" > 
-<thead>    <tr> 
-        <th class="blank" ></th> 
-        <th class="blank level0" ></th> 
-        <th class="col_heading level0 col0" >Average of Item Price</th> 
-        <th class="col_heading level0 col1" >Purchase Count</th> 
-        <th class="col_heading level0 col2" >Total Purchase Value</th> 
-    </tr>    <tr> 
-        <th class="index_name level0" >Item ID</th> 
-        <th class="index_name level1" >Item Name</th> 
-        <th class="blank" ></th> 
-        <th class="blank" ></th> 
-        <th class="blank" ></th> 
-    </tr></thead> 
-<tbody>    <tr> 
-        <th id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01level0_row0" class="row_heading level0 row0" >34</th> 
-        <th id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01level1_row0" class="row_heading level1 row0" >Retribution Axe</th> 
-        <td id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01row0_col0" class="data row0 col0" >4.14</td> 
-        <td id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01row0_col1" class="data row0 col1" >9</td> 
-        <td id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01row0_col2" class="data row0 col2" >$37.26</td> 
-    </tr>    <tr> 
-        <th id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01level0_row1" class="row_heading level0 row1" >115</th> 
-        <th id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01level1_row1" class="row_heading level1 row1" >Spectral Diamond Doomblade</th> 
-        <td id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01row1_col0" class="data row1 col0" >4.25</td> 
-        <td id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01row1_col1" class="data row1 col1" >7</td> 
-        <td id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01row1_col2" class="data row1 col2" >$29.75</td> 
-    </tr>    <tr> 
-        <th id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01level0_row2" class="row_heading level0 row2" >32</th> 
-        <th id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01level1_row2" class="row_heading level1 row2" >Orenmir</th> 
-        <td id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01row2_col0" class="data row2 col0" >4.95</td> 
-        <td id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01row2_col1" class="data row2 col1" >6</td> 
-        <td id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01row2_col2" class="data row2 col2" >$29.70</td> 
-    </tr>    <tr> 
-        <th id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01level0_row3" class="row_heading level0 row3" >103</th> 
-        <th id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01level1_row3" class="row_heading level1 row3" >Singed Scalpel</th> 
-        <td id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01row3_col0" class="data row3 col0" >4.87</td> 
-        <td id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01row3_col1" class="data row3 col1" >6</td> 
-        <td id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01row3_col2" class="data row3 col2" >$29.22</td> 
-    </tr>    <tr> 
-        <th id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01level0_row4" class="row_heading level0 row4" >107</th> 
-        <th id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01level1_row4" class="row_heading level1 row4" >Splitter, Foe Of Subtlety</th> 
-        <td id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01row4_col0" class="data row4 col0" >3.61</td> 
-        <td id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01row4_col1" class="data row4 col1" >8</td> 
-        <td id="T_50a277ba_6dce_11e8_b4c0_3200e8828b01row4_col2" class="data row4 col2" >$28.88</td> 
-    </tr></tbody> 
-</table> 
-
-
-
-#trend 1: Male customers generate three times as much revenue ($1867.68) as female customers ($382.91) with a similar average price around $2.90. 
-#trend 2: Customers in thier early-mid twenties generate the most revenue.
-#trend 3: Both in top spenders and top units sold are items pertaining to revenge: Betrayal, Whisper of Grieving Widows and Retribution Axe. 
+## Background
+
+The data dive continues!
+
+Now, it's time to take what you've learned about Python Pandas and apply it to new situations. For this assignment, you'll need to complete **1 of 2**  Data Challenges. Once again, it's your choice which you choose. Just be sure to give it your all -- as the skills you hone will become powerful tools in your data analytics tool belt.
+
+## Option 1: Heroes of Pymoli
+
+![Fantasy](Images/Fantasy.jpg)
+
+Congratulations! After a lot of hard work in the data munging mines, you've landed a job as Lead Analyst for an independent gaming company. You've been assigned the task of analyzing the data for their most recent fantasy game Heroes of Pymoli.
+
+Like many others in its genre, the game is free-to-play, but players are encouraged to purchase optional items that enhance their playing experience. As a first task, the company would like you to generate a report that breaks down the game's purchasing data into meaningful insights.
+
+Your final report should include each of the following:
+
+### Player Count
+
+* Total Number of Players
+
+### Purchasing Analysis (Total)
+
+* Number of Unique Items
+* Average Purchase Price
+* Total Number of Purchases
+* Total Revenue
+
+### Gender Demographics
+
+* Percentage and Count of Male Players
+* Percentage and Count of Female Players
+* Percentage and Count of Other / Non-Disclosed
+
+### Purchasing Analysis (Gender)
+
+* The below each broken by gender
+  * Purchase Count
+  * Average Purchase Price
+  * Total Purchase Value
+  * Normalized Totals
+
+### Age Demographics
+
+* The below each broken into bins of 4 years (i.e. &lt;10, 10-14, 15-19, etc.)
+  * Purchase Count
+  * Average Purchase Price
+  * Total Purchase Value
+  * Normalized Totals
+
+### Top Spenders
+
+* Identify the the top 5 spenders in the game by total purchase value, then list (in a table):
+  * SN
+  * Purchase Count
+  * Average Purchase Price
+  * Total Purchase Value
+
+### Most Popular Items
+
+* Identify the 5 most popular items by purchase count, then list (in a table):
+  * Item ID
+  * Item Name
+  * Purchase Count
+  * Item Price
+  * Total Purchase Value
+
+### Most Profitable Items
+
+* Identify the 5 most profitable items by total purchase value, then list (in a table):
+  * Item ID
+  * Item Name
+  * Purchase Count
+  * Item Price
+  * Total Purchase Value
+
+As final considerations:
+
+* You must use the Pandas Library and the Jupyter Notebook.
+* You must submit a link to your Jupyter Notebook with the viewable Data Frames.
+* You must include an exported markdown version of your Notebook called  `README.md` in your GitHub repository.
+* You must include a written description of three observable trends based on the data.
+* See [Example Solution](HeroesOfPymoli/HeroesOfPymoli_Example.ipynb) for a reference on expected format.
+
+## Option 2: Academy of Py
+
+![Education](Images/education.jpg)
+
+Well done! Having spent years analyzing financial records for big banks, you've finally scratched your idealistic itch and joined the education sector. In your latest role, you've become the Chief Data Scientist for your city's school district. In this capacity, you'll be helping the  school board and mayor make strategic decisions regarding future school budgets and priorities.
+
+As a first task, you've been asked to analyze the district-wide standardized test results. You'll be given access to every student's math and reading scores, as well as various information on the schools they attend. Your responsibility is to aggregate the data to and showcase obvious trends in school performance.
+
+Your final report should include each of the following:
+
+### District Summary
+
+* Create a high level snapshot (in table form) of the district's key metrics, including:
+  * Total Schools
+  * Total Students
+  * Total Budget
+  * Average Math Score
+  * Average Reading Score
+  * % Passing Math
+  * % Passing Reading
+  * Overall Passing Rate (Average of the above two)
+
+### School Summary
+
+* Create an overview table that summarizes key metrics about each school, including:
+  * School Name
+  * School Type
+  * Total Students
+  * Total School Budget
+  * Per Student Budget
+  * Average Math Score
+  * Average Reading Score
+  * % Passing Math
+  * % Passing Reading
+  * Overall Passing Rate (Average of the above two)
+
+### Top Performing Schools (By Passing Rate)
+
+* Create a table that highlights the top 5 performing schools based on Overall Passing Rate. Include:
+  * School Name
+  * School Type
+  * Total Students
+  * Total School Budget
+  * Per Student Budget
+  * Average Math Score
+  * Average Reading Score
+  * % Passing Math
+  * % Passing Reading
+  * Overall Passing Rate (Average of the above two)
+
+### Bottom Performing Schools (By Passing Rate)
+
+* Create a table that highlights the bottom 5 performing schools based on Overall Passing Rate. Include all of the same metrics as above.
+
+### Math Scores by Grade**
+
+* Create a table that lists the average Math Score for students of each grade level (9th, 10th, 11th, 12th) at each school.
+
+### Reading Scores by Grade
+
+* Create a table that lists the average Reading Score for students of each grade level (9th, 10th, 11th, 12th) at each school.
+
+### Scores by School Spending
+
+* Create a table that breaks down school performances based on average Spending Ranges (Per Student). Use 4 reasonable bins to group school spending. Include in the table each of the following:
+  * Average Math Score
+  * Average Reading Score
+  * % Passing Math
+  * % Passing Reading
+  * Overall Passing Rate (Average of the above two)
+
+### Scores by School Size
+
+* Repeat the above breakdown, but this time group schools based on a reasonable approximation of school size (Small, Medium, Large).
+
+### Scores by School Type
+
+* Repeat the above breakdown, but this time group schools based on school type (Charter vs. District).
+
+As final considerations:
+
+* Your script must work for both data-sets given.
+* You must use the Pandas Library and the Jupyter Notebook.
+* You must submit a link to your Jupyter Notebook with the viewable Data Frames.
+* You must include an exported markdown version of your Notebook called  `README.md` in your GitHub repository.
+* You must include a written description of three observable trends based on the data.
+* See [Example Solution](PyCitySchools/PyCitySchools_Example.ipynb) for a reference on the expected format.
+
+## Hints and Considerations
+
+* These are challenging activities for a number of reasons. For one, these activities will require you to analyze thousands of records. Hacking through the data to look for obvious trends in Excel is just not a feasible option. The size of the data may seem daunting, but Python Pandas will allow you to efficiently parse through it.
+
+* Second, these activities will also challenge you by requiring you to learn on your feet. Don't fool yourself into thinking: "I need to study Pandas more closely before diving in." Get the basic gist of the library and then _immediately_ get to work. When facing a daunting task, it's easy to think: "I'm just not ready to tackle it yet." But that's the surest way to never succeed. Learning to program requires one to constantly tinker, experiment, and learn on the fly. You are doing exactly the _right_ thing, if you find yourself constantly practicing Google-Fu and diving into documentation. There is just no way (or reason) to try and memorize it all. Online references are available for you to use when you need them. So use them!
+
+* Take each of these tasks one at a time. Begin your work, answering the basic questions: "How do I import the data?" "How do I convert the data into a DataFrame?" "How do I build the first table?" Don't get intimidated by the number of asks. Many of them are repetitive in nature with just a few tweaks. Be persistent and creative!
+
+* Expect these exercises to take time! Don't get discouraged if you find yourself spending  hours initially with little progress. Force yourself to deal with the discomfort of not knowing and forge ahead. This exercise is likely to take between 15-30 hours of your time. Consider these hours an investment in your future!
+
+* As always, feel encouraged to work in groups and get help from your TAs and Instructor. Just remember, true success comes from mastery and _not_ a completed homework assignment. So challenge yourself to truly succeed!
+
+## Copyright
+
+Trilogy Education Services (C) 2018. All Rights Reserved.
